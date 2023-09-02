@@ -1,0 +1,8 @@
+# Distributing / packaging
+.venv
+.cache
+.env
+
+# downloads / tests
+downloaded_songs
+songsTitlesAndArtists.csv
