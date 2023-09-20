@@ -29,13 +29,15 @@ load_dotenv()
 SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
 SPOTIPY_CLIENT_SECRET = os.getenv("SPOTIPY_CLIENT_SECRET")
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+CODE = os.getenv("BROWSER_CODE")
 
 def main():
-  with open('./songsTitlesAndArtists.csv') as file_obj:
-    reader_obj = csv.reader(file_obj)
-    for row in reader_obj:
-      print('csv row',row[0], row[1])
-      download_video_as_mp3(row[0], row[1])
+  spotify_auth()
+  # with open('./songsTitlesAndArtists.csv') as file_obj:
+  #   reader_obj = csv.reader(file_obj)
+  #   for row in reader_obj:
+  #     print('csv row',row[0], row[1])
+  #     download_video_as_mp3(row[0], row[1])
 
 def download_video_as_mp3(song_name, artist_name):
   youtube = build('youtube', 'v3', developerKey = YOUTUBE_API_KEY)
@@ -70,10 +72,6 @@ def spotify_auth():
     "scope": "user-library-read"
   }
   webbrowser.open("https://accounts.spotify.com/authorize?" + urlencode(auth_headers))
-  driver = webdriver.Chrome()
-  
-  code = driver.current_url
-  print(code)
 
   encoded_credentials = base64.b64encode(SPOTIPY_CLIENT_ID.encode() + b':' + SPOTIPY_CLIENT_SECRET.encode()).decode("utf-8")
 
@@ -83,12 +81,13 @@ def spotify_auth():
   }
   token_data = {
     "grant_type": "authorization_code",
-    "code": code,
+    "code": CODE,
     "redirect_uri": "http://localhost:7777/callback"
   }
   r = requests.post("https://accounts.spotify.com/api/token", data=token_data, headers=token_headers)
 
   token = r.json()["access_token"]
+  print(token)
 
   user_headers = {
     "Authorization": "Bearer " + token,
@@ -99,7 +98,7 @@ def spotify_auth():
     "limit": 50,
     "offset": 50
   }
-  return user_params, user_headers
+  spotify_request(user_params, user_headers)
 
 def spotify_request(user_params, user_headers):
   user_tracks_response = requests.get("https://api.spotify.com/v1/playlists/6t1WrMPiSAB5jt0BdtKfum/tracks?offset=0&limit=50", params=user_params, headers=user_headers)
