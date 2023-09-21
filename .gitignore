@@ -2,6 +2,7 @@
 .venv
 .cache
 .env
+.DS_Store
 
 # downloads / tests
 downloaded_songs
