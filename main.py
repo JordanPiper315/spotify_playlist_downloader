@@ -119,8 +119,5 @@ def spotify_request(user_params, user_headers):
 
   json_object = json.dumps(user_tracks_response.json(), indent=4)
 
-  with open("songs.json", "w") as outfile:
-    outfile.write(json_object)
-
 if __name__ == '__main__':
   main()
