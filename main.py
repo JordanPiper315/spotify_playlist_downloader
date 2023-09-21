@@ -9,6 +9,7 @@ import spotipy
 from pytube import YouTube
 from spotipy.oauth2 import SpotifyClientCredentials
 import csv
+import pandas as pd
 import sys
 import urllib
 import urllib.error
@@ -31,12 +32,17 @@ CODE = os.getenv("BROWSER_CODE")
 
 def main():
   # spotify_auth()
-  
-  with open('./songsTitlesAndArtists.csv') as file_obj:
-    reader_obj = csv.reader(file_obj)
-    for row in reader_obj:
-      print('csv row',row[0], row[1])
-      download_video_as_mp3(row[0], row[1])
+  filename = 'songsTitlesAndArtists1.csv'
+  df = pd.read_csv(filename)
+  print('row', df.to_string())
+  df = df.iloc(df.index[1:])
+
+
+  # with open('./songsTitlesAndArtists1.csv') as file_obj:
+  #   reader_obj = csv.reader(file_obj)
+  #   for row in reader_obj:
+  #     print('csv row',row[0], row[1])
+      # download_video_as_mp3(row[0], row[1])
 
 def download_video_as_mp3(song_name, artist_name):
   youtube = build('youtube', 'v3', developerKey = YOUTUBE_API_KEY)
