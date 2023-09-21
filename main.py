@@ -10,7 +10,6 @@ from pytube import YouTube
 from spotipy.oauth2 import SpotifyClientCredentials
 import csv
 import sys
-from selenium import webdriver
 import urllib
 import urllib.error
 import urllib.request
@@ -20,6 +19,9 @@ from dotenv import load_dotenv
 from googleapiclient.discovery import build
     # also figure out how to move files to folder post download
     # testing
+    # add try except to spotify request, look up how to check for chached access token, try except for access token and keep for auth code
+    # add check if songs and titles csv has songs if not empty just run down load
+    # maybe create flow asking to download songs in playlist or import spotify music
 
 load_dotenv()
 SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
@@ -28,13 +30,13 @@ YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 CODE = os.getenv("BROWSER_CODE")
 
 def main():
-  spotify_auth()
+  # spotify_auth()
   
-  # with open('./songsTitlesAndArtists.csv') as file_obj:
-  #   reader_obj = csv.reader(file_obj)
-  #   for row in reader_obj:
-  #     print('csv row',row[0], row[1])
-  #     download_video_as_mp3(row[0], row[1])
+  with open('./songsTitlesAndArtists.csv') as file_obj:
+    reader_obj = csv.reader(file_obj)
+    for row in reader_obj:
+      print('csv row',row[0], row[1])
+      download_video_as_mp3(row[0], row[1])
 
 def download_video_as_mp3(song_name, artist_name):
   youtube = build('youtube', 'v3', developerKey = YOUTUBE_API_KEY)
@@ -42,7 +44,6 @@ def download_video_as_mp3(song_name, artist_name):
   res = request.execute()
   for item in res['items']:
     print('youtube title',item['snippet']['title'])
-    print(item['id']['videoId'], item['snippet']['channelTitle'])
     url = (f"youtube.com/watch?v={item['id']['videoId']}&ab_channel={item['snippet']['channelTitle']}")
   download_mp3_from_youtube(url)
 
