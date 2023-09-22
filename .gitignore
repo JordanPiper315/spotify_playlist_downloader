@@ -9,3 +9,5 @@ downloaded_songs
 songsTitlesAndArtists.csv
 songsTitlesAndArtists1.csv
 songs.json
+songsToDownload.txt
+songsToDownload1.txt

@@ -32,21 +32,25 @@ CODE = os.getenv("BROWSER_CODE")
 
 def main():
   # spotify_auth()
-  filename = 'songsTitlesAndArtists1.csv'
-  df = pd.read_csv(filename)
-  print('row', df.to_string())
-  df = df.iloc(df.index[1:])
+  while True:
+    with open ('songsToDownload1.txt', 'r', encoding='utf-8') as file:
+      data = file.readlines()
+      download_video_as_mp3(data[0])
 
+    data[0] = ''
 
+    with open('songsToDownload1.txt', 'w', encoding='utf-8') as file:
+      file.writelines(data)
+  
   # with open('./songsTitlesAndArtists1.csv') as file_obj:
   #   reader_obj = csv.reader(file_obj)
   #   for row in reader_obj:
   #     print('csv row',row[0], row[1])
       # download_video_as_mp3(row[0], row[1])
 
-def download_video_as_mp3(song_name, artist_name):
+def download_video_as_mp3(input):
   youtube = build('youtube', 'v3', developerKey = YOUTUBE_API_KEY)
-  request = youtube.search().list(q=f'{song_name}, {artist_name}, Lyrics',part='snippet',type='video',maxResults=1)
+  request = youtube.search().list(q=f'{input}, Lyrics',part='snippet',type='video',maxResults=1)
   res = request.execute()
   for item in res['items']:
     print('youtube title',item['snippet']['title'])
