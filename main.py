@@ -6,7 +6,7 @@ import base64
 import webbrowser
 import json
 import spotipy
-from pytube import YouTube
+from pytube import Youtube
 from spotipy.oauth2 import SpotifyClientCredentials
 import csv
 import sys
