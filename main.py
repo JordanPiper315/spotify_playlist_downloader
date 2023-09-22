@@ -9,7 +9,6 @@ import spotipy
 from pytube import YouTube
 from spotipy.oauth2 import SpotifyClientCredentials
 import csv
-import pandas as pd
 import sys
 import urllib
 import urllib.error
@@ -21,7 +20,7 @@ from googleapiclient.discovery import build
     # also figure out how to move files to folder post download
     # testing
     # add try except to spotify request, look up how to check for chached access token, try except for access token and keep for auth code
-    # add check if songs and titles csv has songs if not empty just run down load
+    # add check if songs and titles csv has songs if not empty just run download
     # maybe create flow asking to download songs in playlist or import spotify music
 
 load_dotenv()
