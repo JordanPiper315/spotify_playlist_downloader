@@ -10,7 +10,6 @@ from pytube import YouTube
 from spotipy.oauth2 import SpotifyClientCredentials
 import csv
 import sys
-from selenium import webdriver
 import urllib
 import urllib.error
 import urllib.request
@@ -31,21 +30,29 @@ YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 CODE = os.getenv("BROWSER_CODE")
 
 def main():
-  spotify_auth()
+  # spotify_auth()
+  while True:
+    with open ('songsToDownload1.txt', 'r', encoding='utf-8') as file:
+      data = file.readlines()
+      download_video_as_mp3(data[0])
+
+    data[0] = ''
+
+    with open('songsToDownload1.txt', 'w', encoding='utf-8') as file:
+      file.writelines(data)
   
-  # with open('./songsTitlesAndArtists.csv') as file_obj:
+  # with open('./songsTitlesAndArtists1.csv') as file_obj:
   #   reader_obj = csv.reader(file_obj)
   #   for row in reader_obj:
   #     print('csv row',row[0], row[1])
-  #     download_video_as_mp3(row[0], row[1])
+      # download_video_as_mp3(row[0], row[1])
 
-def download_video_as_mp3(song_name, artist_name):
+def download_video_as_mp3(input):
   youtube = build('youtube', 'v3', developerKey = YOUTUBE_API_KEY)
-  request = youtube.search().list(q=f'{song_name}, {artist_name}, Lyrics',part='snippet',type='video',maxResults=1)
+  request = youtube.search().list(q=f'{input}, Lyrics',part='snippet',type='video',maxResults=1)
   res = request.execute()
   for item in res['items']:
     print('youtube title',item['snippet']['title'])
-    print(item['id']['videoId'], item['snippet']['channelTitle'])
     url = (f"youtube.com/watch?v={item['id']['videoId']}&ab_channel={item['snippet']['channelTitle']}")
   download_mp3_from_youtube(url)
 
